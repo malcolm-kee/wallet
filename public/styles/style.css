@@ -1,0 +1,11 @@
+body {
+  padding-top: 70px;
+}
+
+.content {
+  display: flex;
+}
+
+.content-item {
+  flex: 1;
+}
