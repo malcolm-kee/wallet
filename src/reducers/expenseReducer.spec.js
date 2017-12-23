@@ -2,10 +2,7 @@ import deepFreeze from "deep-freeze";
 
 import expenseReducer from "./expenseReducer";
 
-import {
-  setExpenses,
-  addExpense
-} from "./../actionCreators/expenseActionCreators";
+import { setExpenses, addExpense } from "./../actions/expense";
 
 const expenseA = {
   id: "a",

@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { ulid } from "ulid";
 
-import { addExpense } from "./../../../actionCreators/expenseActionCreators";
+import { addExpense } from "./../../../actions/expense";
 
 import AddExpenseForm from "./AddExpenseForm";
 
