@@ -25,12 +25,9 @@ const expenseC = {
 it("reduces setExpenses with the expected structure", () => {
   const oldState = {};
   const finalState = {
-    byId: ["a", "b", "c"],
-    byHash: {
-      a: expenseA,
-      b: expenseB,
-      c: expenseC
-    }
+    a: expenseA,
+    b: expenseB,
+    c: expenseC
   };
   const action = {
     type: SET_EXPENSES,
@@ -44,19 +41,13 @@ it("reduces setExpenses with the expected structure", () => {
 
 it("reduces addExpense with the expected structure", () => {
   const oldState = {
-    byId: ["a", "c"],
-    byHash: {
-      a: expenseA,
-      c: expenseC
-    }
+    a: expenseA,
+    c: expenseC
   };
   const finalState = {
-    byId: ["a", "c", "b"],
-    byHash: {
-      a: expenseA,
-      c: expenseC,
-      b: expenseB
-    }
+    a: expenseA,
+    c: expenseC,
+    b: expenseB
   };
   const action = {
     type: ADD_EXPENSE,

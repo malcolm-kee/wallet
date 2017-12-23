@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Decimal from "decimal.js-light";
+import { addAll } from "./../../services/calculation/summary";
 
 import Summary from "./Summary";
 
@@ -11,14 +11,7 @@ class SummaryContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const expenseObj = state.expense;
-  const expenses = expenseObj.byId.map(id => expenseObj.byHash[id]);
-  const totalExpense = expenses
-    .reduce((total, expense) => {
-      return total.plus(new Decimal(expense.amount));
-    }, new Decimal(0.0))
-    .toDecimalPlaces(2)
-    .toString();
+  const totalExpense = addAll(state.expense);
   return {
     totalExpense
   };

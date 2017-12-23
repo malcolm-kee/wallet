@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import moment from "moment";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { ulid } from "ulid";
 
 import AddExpenseForm from "./AddExpenseForm";
 
 class AddExpenseFormContainer extends Component {
   state = {
+    id: ulid(),
     category: "",
     amount: 0.0,
     date: moment().format("YYYY-MM-DD")
