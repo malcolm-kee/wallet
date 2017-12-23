@@ -2,7 +2,9 @@ import React from "react";
 
 const Summary = props => (
   <div className="container">
-    <p>Total amount is RM {props.amount}</p>
+    <div className="jumbotron">
+      <h1>Total amount is RM {props.amount}</h1>
+    </div>
   </div>
 );
 

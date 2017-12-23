@@ -1,11 +1,11 @@
 import React from "react";
 
 const AddExpenseForm = props => {
-  const { onChange, category, amount } = props;
+  const { onChange, onSubmit, category, amount, date } = props;
 
   return (
     <div className="container">
-      <form>
+      <form onSubmit={onSubmit}>
         <fieldset>
           <legend>Add Expense</legend>
           <div className="form-group">
@@ -33,7 +33,21 @@ const AddExpenseForm = props => {
               onChange={onChange}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="add-expense-date">Date</label>
+            <input
+              className="form-control"
+              type="date"
+              id="add-expense-date"
+              name="date"
+              onChange={onChange}
+              value={date}
+            />
+          </div>
         </fieldset>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
     </div>
   );
