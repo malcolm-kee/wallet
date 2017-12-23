@@ -4,6 +4,8 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { ulid } from "ulid";
 
+import { addExpense } from "./../../../actionCreators/expenseActionCreators";
+
 import AddExpenseForm from "./AddExpenseForm";
 
 class AddExpenseFormContainer extends Component {
@@ -24,11 +26,13 @@ class AddExpenseFormContainer extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    const { dispatchAddExpense, history } = this.props;
+
     const expense = { ...this.state };
 
-    this.props.addExpense(expense);
+    dispatchAddExpense(expense);
 
-    this.props.history.push("/");
+    history.push("/");
   };
 
   render() {
@@ -43,11 +47,8 @@ class AddExpenseFormContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  addExpense(expense) {
-    dispatch({
-      type: "ADD_EXPENSE",
-      payload: expense
-    });
+  dispatchAddExpense(expense) {
+    dispatch(addExpense(expense));
   }
 });
 

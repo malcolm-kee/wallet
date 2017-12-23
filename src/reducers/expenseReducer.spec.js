@@ -2,7 +2,10 @@ import deepFreeze from "deep-freeze";
 
 import expenseReducer from "./expenseReducer";
 
-import { SET_EXPENSES, ADD_EXPENSE } from "../constants";
+import {
+  setExpenses,
+  addExpense
+} from "./../actionCreators/expenseActionCreators";
 
 const expenseA = {
   id: "a",
@@ -29,10 +32,7 @@ it("reduces setExpenses with the expected structure", () => {
     b: expenseB,
     c: expenseC
   };
-  const action = {
-    type: SET_EXPENSES,
-    payload: [expenseA, expenseB, expenseC]
-  };
+  const action = setExpenses([expenseA, expenseB, expenseC]);
 
   deepFreeze(oldState);
 
@@ -49,10 +49,7 @@ it("reduces addExpense with the expected structure", () => {
     c: expenseC,
     b: expenseB
   };
-  const action = {
-    type: ADD_EXPENSE,
-    payload: expenseB
-  };
+  const action = addExpense(expenseB);
 
   deepFreeze(oldState);
 
