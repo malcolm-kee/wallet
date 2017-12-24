@@ -3,10 +3,13 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./config/store";
+import { listenToAuthChanges } from "./actions/auth";
 
 import HeaderContainer from "./components/HeaderContainer";
 import SummaryContainer from "./scenes/Summary/SummaryContainer";
 import AddExpenseFormContainer from "./scenes/Expense/components/AddExpenseFormContainer";
+
+store.dispatch(listenToAuthChanges());
 
 class App extends Component {
   render() {

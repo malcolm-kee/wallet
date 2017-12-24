@@ -1,4 +1,5 @@
 import { auth, googleAuthProvider } from "./../config/firebase";
+import { listenForExpenses, stoplistenForExpenses } from "./expense";
 
 import {
   ATTEMPTING_LOGIN,
@@ -13,14 +14,9 @@ export const signIn = () => dispatch => {
   dispatch({
     type: ATTEMPTING_LOGIN
   });
-  auth
-    .signInWithPopup(googleAuthProvider)
-    .then(({ user }) => {
-      dispatch(signedIn(user));
-    })
-    .catch(() => {
-      dispatch(signInFail());
-    });
+  auth.signInWithPopup(googleAuthProvider).catch(() => {
+    dispatch(signInFail());
+  });
 };
 
 export const signOut = () => dispatch => {
@@ -28,14 +24,9 @@ export const signOut = () => dispatch => {
     type: ATTEMPTING_LOGOUT
   });
 
-  auth
-    .signOut()
-    .then(() => {
-      dispatch(signedOut());
-    })
-    .catch(() => {
-      dispatch(signOutFail());
-    });
+  auth.signOut().catch(() => {
+    dispatch(signOutFail());
+  });
 };
 
 const signedIn = user => {
@@ -63,3 +54,15 @@ const signedOut = () => ({
 const signOutFail = () => ({
   type: SIGN_OUT_FAILED
 });
+
+export const listenToAuthChanges = () => dispatch => {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      dispatch(signedIn(user));
+      dispatch(listenForExpenses(user.uid));
+    } else {
+      dispatch(signedOut());
+      dispatch(stoplistenForExpenses());
+    }
+  });
+};

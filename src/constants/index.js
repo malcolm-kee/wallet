@@ -1,4 +1,5 @@
 export const SET_EXPENSES = "SET_EXPENSES";
+export const CLEAR_EXPENSES = "CLEAR_EXPENSES";
 export const ADD_EXPENSE = "ADD_EXPENSE";
 
 export const ATTEMPTING_LOGIN = "ATTEMPTING_LOGIN";
