@@ -10,3 +10,9 @@ export const SIGN_OUT_FAILED = "SIGN_OUT_FAILED";
 export const SIGNED_IN = "SIGNED_IN";
 export const SIGNED_OUT = "SIGNED_OUT";
 export const ANONYMOUS = "ANONYMOUS";
+
+export const START_UPLOAD = "START_UPLOAD";
+export const SET_UPLOAD_PROGRESS = "SET_UPLOAD_PROGRESS";
+export const COMPLETE_UPLOAD = "COMPLETE_UPLOAD";
+export const NO_ACTIVITY = "NO_ACTIVITY";
+export const UPLOADING = "UPLOADING";

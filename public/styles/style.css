@@ -9,3 +9,7 @@ body {
 .content-item {
   flex: 1;
 }
+
+.currentUser--photo {
+  max-height: 100px;
+}

@@ -4,6 +4,8 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { ulid } from "ulid";
 
+import { storage } from "./../../../config/firebase";
+
 import { createExpense } from "./../../../actions/expense";
 
 import AddExpenseForm from "./AddExpenseForm";
@@ -11,9 +13,12 @@ import AddExpenseForm from "./AddExpenseForm";
 class AddExpenseFormContainer extends Component {
   state = {
     id: ulid(),
-    category: "",
+    category: "food",
     amount: 0.0,
-    date: moment().format("YYYY-MM-DD")
+    date: moment().format("YYYY-MM-DD"),
+    imageUrl: null,
+    imageName: null,
+    uploadProgress: null
   };
 
   handleChange = event => {
@@ -23,12 +28,53 @@ class AddExpenseFormContainer extends Component {
     });
   };
 
+  handleFileUpload = event => {
+    const { auth } = this.props;
+
+    const file = event.target.files[0];
+    const storageRef = storage.ref("user-images").child(auth.uid);
+    const uploadTask = storageRef
+      .child(file.name)
+      .put(file, { contentType: file.type });
+
+    uploadTask.on("state_changed", snapshot => {
+      const uploadProgress =
+        snapshot.bytesTransferred / snapshot.totalBytes * 100;
+      this.setState({ uploadProgress });
+    });
+
+    uploadTask.then(snapshot => {
+      this.setState({
+        imageUrl: snapshot.downloadURL,
+        imageName: file.name
+      });
+      this.setState({ uploadProgress: null });
+    });
+  };
+
+  handleFileRemoval = () => {
+    const { auth } = this.props;
+    const { imageName } = this.state;
+
+    const storageRef = storage.ref("user-images").child(auth.uid);
+    storageRef
+      .child(imageName)
+      .delete()
+      .then(() => {
+        this.setState({
+          imageUrl: null,
+          imageName: null
+        });
+      });
+  };
+
   handleSubmit = event => {
     event.preventDefault();
 
     const { dispatchCreateExpense, history } = this.props;
+    const { id, category, amount, date, imageUrl } = this.state;
 
-    const expense = { ...this.state };
+    const expense = { id, category, amount, date, imageUrl };
 
     dispatchCreateExpense(expense);
 
@@ -39,12 +85,18 @@ class AddExpenseFormContainer extends Component {
     return (
       <AddExpenseForm
         onChange={this.handleChange}
+        onFileUpload={this.handleFileUpload}
+        onFileRemoval={this.handleFileRemoval}
         onSubmit={this.handleSubmit}
         {...this.state}
       />
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
 const mapDispatchToProps = dispatch => ({
   dispatchCreateExpense(expense) {
@@ -53,5 +105,5 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(
-  connect(null, mapDispatchToProps)(AddExpenseFormContainer)
+  connect(mapStateToProps, mapDispatchToProps)(AddExpenseFormContainer)
 );

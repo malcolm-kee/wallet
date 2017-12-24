@@ -1,54 +1,118 @@
 import React from "react";
+import {
+  Button,
+  Col,
+  Form,
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  Image,
+  ProgressBar
+} from "react-bootstrap";
 
 const AddExpenseForm = props => {
-  const { onChange, onSubmit, category, amount, date } = props;
+  const {
+    onChange,
+    onFileUpload,
+    onFileRemoval,
+    onSubmit,
+    uploadProgress,
+    category,
+    amount,
+    date,
+    imageUrl,
+    imageName
+  } = props;
 
   return (
     <div className="container">
-      <form onSubmit={onSubmit}>
-        <fieldset>
-          <legend>Add Expense</legend>
-          <div className="form-group">
-            <label htmlFor="add-expense-category">Category</label>
-            <select
-              className="form-control"
-              id="add-expense-category"
+      <Form horizontal onSubmit={onSubmit}>
+        <legend>Add Expense</legend>
+        <FormGroup controlId="add-expense-category">
+          <Col componentClass={ControlLabel} sm={2}>
+            Category
+          </Col>
+          <Col sm={10}>
+            <FormControl
+              componentClass="select"
               name="category"
               onChange={onChange}
               value={category}
             >
-              <option>Eat/Drink</option>
-              <option>Transportation</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="add-expense-amount">Amount</label>
-            <input
+              <option value="food">Eat/Drink</option>
+              <option value="transportation">Transportation</option>
+              <option value="love">Love</option>
+              <option value="reading">Reading</option>
+            </FormControl>
+          </Col>
+        </FormGroup>
+        <FormGroup controlId="add-expense-amount">
+          <Col componentClass={ControlLabel} sm={2}>
+            Amount
+          </Col>
+          <Col sm={10}>
+            <FormControl
               name="amount"
-              className="form-control"
               type="number"
               step="0.01"
               value={amount}
-              id="add-expense-amount"
               onChange={onChange}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="add-expense-date">Date</label>
-            <input
-              className="form-control"
-              type="date"
-              id="add-expense-date"
+          </Col>
+        </FormGroup>
+        <FormGroup controlId="add-expense-date">
+          <Col componentClass={ControlLabel} sm={2}>
+            Date
+          </Col>
+          <Col sm={10}>
+            <FormControl
               name="date"
-              onChange={onChange}
+              type="date"
               value={date}
+              onChange={onChange}
             />
-          </div>
-        </fieldset>
-        <button type="submit" className="btn btn-primary">
+          </Col>
+        </FormGroup>
+        {uploadProgress !== null && (
+          <FormGroup>
+            <Col componentClass={ControlLabel} sm={2}>
+              Uploading...
+            </Col>
+            <Col sm={10}>
+              <ProgressBar now={uploadProgress} label={`${uploadProgress}%`} />
+            </Col>
+          </FormGroup>
+        )}
+        {imageUrl && (
+          <FormGroup>
+            <Col sm={4} smOffset={2}>
+              <Image src={imageUrl} alt={imageName} thumbnail />
+            </Col>
+          </FormGroup>
+        )}
+        <FormGroup controlId="add-expense-image">
+          <Col componentClass={ControlLabel} sm={2}>
+            Receipt/Image
+          </Col>
+          <Col sm={10}>
+            {imageUrl ? (
+              <Button onClick={onFileRemoval} bsSize="small">
+                Remove Image
+              </Button>
+            ) : (
+              <FormControl
+                name="image"
+                type="file"
+                onChange={onFileUpload}
+                placeholder={imageName}
+              />
+            )}
+          </Col>
+        </FormGroup>
+        <Button type="submit" bsStyle="primary">
           Submit
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };

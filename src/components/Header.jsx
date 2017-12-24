@@ -1,23 +1,25 @@
 import React from "react";
+import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Header = props => (
-  <nav className="navbar navbar-expand navbar-fixed-top">
-    <div className="container-fluid">
-      <div className="navbar-header">
-        <Link to="/" className="navbar-brand">
-          Wallet
-        </Link>
-      </div>
-      <ul className="nav navbar-nav navbar-right">
-        <li>
-          <Link to="/expense/add" className="btn btn-secondary">
-            Add
+  <Navbar fixedTop inverse>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <Link to="/">Wallet</Link>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+      <Nav pullRight>
+        <NavItem>
+          <Link to="/expense/add" className="btn btn-success">
+            Add Expense
           </Link>
-        </li>
-      </ul>
-    </div>
-  </nav>
+        </NavItem>
+      </Nav>
+    </Navbar.Collapse>
+  </Navbar>
 );
 
 export default Header;
