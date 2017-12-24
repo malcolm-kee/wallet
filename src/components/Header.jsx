@@ -1,6 +1,7 @@
 import React from "react";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
+import { Navbar, Nav, NavItem, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
 const Header = props => (
   <Navbar fixedTop inverse>
@@ -12,11 +13,11 @@ const Header = props => (
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav pullRight>
-        <NavItem>
-          <Link to="/expense/add" className="btn btn-success">
-            Add Expense
-          </Link>
-        </NavItem>
+        <LinkContainer to="/expense/add">
+          <NavItem>
+            <Button bsStyle="success">Add Expense</Button>
+          </NavItem>
+        </LinkContainer>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

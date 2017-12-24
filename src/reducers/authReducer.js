@@ -3,6 +3,8 @@ import {
   ATTEMPTING_LOGIN,
   ATTEMPTING_LOGOUT,
   AWAITING_AUTH_RESPONSE,
+  CLEAR_REDIRECT_URL,
+  SET_REDIRECT_URL,
   SIGN_IN_FAILED,
   SIGN_OUT_FAILED,
   SIGNED_IN,
@@ -10,11 +12,12 @@ import {
 } from "./../constants";
 
 const DEFAULT_STATE = {
-  status: ANONYMOUS,
+  status: AWAITING_AUTH_RESPONSE,
   uid: "",
   displayName: "",
   photoURL: "",
-  email: ""
+  email: "",
+  redirectUrl: ""
 };
 
 const attemptAuth = state => ({
@@ -26,6 +29,7 @@ const signedIn = (state, action) => {
   const { uid, displayName, photoURL, email } = action.payload;
 
   return {
+    ...state,
     status: SIGNED_IN,
     uid,
     displayName,
@@ -40,12 +44,23 @@ const signInFail = state => ({
 });
 
 const signedOut = () => ({
-  ...DEFAULT_STATE
+  ...DEFAULT_STATE,
+  status: ANONYMOUS
 });
 
 const signOutFail = state => ({
   ...state,
   status: SIGNED_IN
+});
+
+const setRedirectUrl = (state, action) => ({
+  ...state,
+  redirectUrl: action.payload
+});
+
+const clearRedirectUrl = state => ({
+  ...state,
+  redirectUrl: ""
 });
 
 const authReducer = (state = DEFAULT_STATE, action) => {
@@ -67,6 +82,12 @@ const authReducer = (state = DEFAULT_STATE, action) => {
 
     case SIGNED_OUT:
       return signedOut();
+
+    case SET_REDIRECT_URL:
+      return setRedirectUrl(state, action);
+
+    case CLEAR_REDIRECT_URL:
+      return clearRedirectUrl(state);
 
     default:
       return state;

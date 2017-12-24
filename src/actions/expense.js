@@ -32,7 +32,9 @@ export const listenForExpenses = uid => dispatch => {
 };
 
 export const stoplistenForExpenses = () => dispatch => {
-  userExpensesRef.off("child_added");
-  userExpensesRef = undefined;
+  if (userExpensesRef) {
+    userExpensesRef.off("child_added");
+    userExpensesRef = undefined;
+  }
   dispatch(clearExpenses());
 };

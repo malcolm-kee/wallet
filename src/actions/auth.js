@@ -7,7 +7,9 @@ import {
   SIGN_IN_FAILED,
   SIGNED_OUT,
   SIGN_OUT_FAILED,
-  ATTEMPTING_LOGOUT
+  ATTEMPTING_LOGOUT,
+  SET_REDIRECT_URL,
+  CLEAR_REDIRECT_URL
 } from "../constants";
 
 export const signIn = () => dispatch => {
@@ -66,3 +68,12 @@ export const listenToAuthChanges = () => dispatch => {
     }
   });
 };
+
+export const setRedirectUrl = url => ({
+  type: SET_REDIRECT_URL,
+  payload: url
+});
+
+export const clearRedirectUrl = () => ({
+  type: CLEAR_REDIRECT_URL
+});

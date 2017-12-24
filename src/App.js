@@ -6,8 +6,11 @@ import store from "./config/store";
 import { listenToAuthChanges } from "./actions/auth";
 
 import HeaderContainer from "./components/HeaderContainer";
-import SummaryContainer from "./scenes/Summary/SummaryContainer";
-import AddExpenseFormContainer from "./scenes/Expense/components/AddExpenseFormContainer";
+import Home from "./components/Home";
+import Landing from "./components/Landing";
+
+import EnsureLoggedInContainer from "./components/EnsureLoggedInContainer";
+import LoginContainer from "./scenes/Auth/components/LoginContainer";
 
 store.dispatch(listenToAuthChanges());
 
@@ -19,12 +22,10 @@ class App extends Component {
           <div className="App">
             <HeaderContainer />
             <Switch>
-              <Route exact path="/" component={SummaryContainer} />
-              <Route
-                exact
-                path="/expense/add"
-                component={AddExpenseFormContainer}
-              />
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={LoginContainer} />
+              <Route exact path="/landing" component={Landing} />
+              <Route component={EnsureLoggedInContainer} />
             </Switch>
           </div>
         </Provider>
