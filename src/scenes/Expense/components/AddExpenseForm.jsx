@@ -7,7 +7,8 @@ import {
   ControlLabel,
   FormControl,
   Image,
-  ProgressBar
+  ProgressBar,
+  HelpBlock
 } from "react-bootstrap";
 
 const AddExpenseForm = props => {
@@ -23,6 +24,8 @@ const AddExpenseForm = props => {
     imageUrl,
     imageName
   } = props;
+
+  const fileSizeLimit = 5 * 1024 * 1024;
 
   return (
     <div className="container">
@@ -94,20 +97,25 @@ const AddExpenseForm = props => {
           <Col componentClass={ControlLabel} sm={2}>
             Receipt/Image
           </Col>
-          <Col sm={10}>
-            {imageUrl ? (
+
+          {imageUrl ? (
+            <Col sm={10}>
               <Button onClick={onFileRemoval} bsSize="small">
                 Remove Image
               </Button>
-            ) : (
+            </Col>
+          ) : (
+            <Col sm={10}>
               <FormControl
                 name="image"
                 type="file"
+                size={fileSizeLimit}
                 onChange={onFileUpload}
                 placeholder={imageName}
               />
-            )}
-          </Col>
+              <HelpBlock>File must be less than 5 MB.</HelpBlock>
+            </Col>
+          )}
         </FormGroup>
         <Button type="submit" bsStyle="primary">
           Submit

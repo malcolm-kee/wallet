@@ -56,6 +56,8 @@ class AddExpenseFormContainer extends Component {
     const { auth } = this.props;
     const { imageName } = this.state;
 
+    console.log("imageName", imageName);
+
     const storageRef = storage.ref("user-images").child(auth.uid);
     storageRef
       .child(imageName)
