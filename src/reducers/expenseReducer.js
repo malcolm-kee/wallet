@@ -1,4 +1,9 @@
-import { SET_EXPENSES, ADD_EXPENSE, CLEAR_EXPENSES } from "../constants";
+import {
+  SET_EXPENSES,
+  ADD_EXPENSE,
+  CLEAR_EXPENSES,
+  REMOVE_EXPENSE
+} from "../constants";
 
 const DEFAULT_STATE = {};
 
@@ -21,6 +26,13 @@ const addExpense = (state, action) => {
   };
 };
 
+const removeExpense = (state, action) => {
+  const expense = action.payload;
+  const { [expense.id]: value, ...newState } = state;
+
+  return newState;
+};
+
 const expenseReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_EXPENSES:
@@ -31,6 +43,9 @@ const expenseReducer = (state = DEFAULT_STATE, action) => {
 
     case CLEAR_EXPENSES:
       return clearExpenses();
+
+    case REMOVE_EXPENSE:
+      return removeExpense(state, action);
 
     default:
       return state;

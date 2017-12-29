@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import moment from "moment";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import uuid from "uuid/v4";
 
 import { storage } from "./../../../config/firebase";
 
@@ -12,7 +11,6 @@ import AddExpenseForm from "./AddExpenseForm";
 
 class AddExpenseFormContainer extends Component {
   state = {
-    id: uuid(),
     category: "food",
     amount: 0.0,
     date: moment().format("YYYY-MM-DD"),
@@ -74,9 +72,9 @@ class AddExpenseFormContainer extends Component {
     event.preventDefault();
 
     const { dispatchCreateExpense, history } = this.props;
-    const { id, category, amount, date, imageUrl } = this.state;
+    const { category, amount, date, imageUrl } = this.state;
 
-    const expense = { id, category, amount, date, imageUrl };
+    const expense = { category, amount, date, imageUrl };
 
     dispatchCreateExpense(expense);
 

@@ -9,6 +9,7 @@ import { setRedirectUrl } from "../actions/auth";
 import Loading from "./Loading";
 import SummaryContainer from "../scenes/Summary/SummaryContainer";
 import AddExpenseFormContainer from "../scenes/Expense/components/AddExpenseFormContainer";
+import ExpenseListContainer from "../scenes/Expense/components/ExpenseListContainer";
 
 class EnsureLoggedInContainer extends Component {
   componentDidMount() {
@@ -50,6 +51,7 @@ class EnsureLoggedInContainer extends Component {
             path="/expense/add"
             component={AddExpenseFormContainer}
           />
+          <Route exact path="/expense/all" component={ExpenseListContainer} />
         </Switch>
       );
     } else if (authStatus === AWAITING_AUTH_RESPONSE) {
