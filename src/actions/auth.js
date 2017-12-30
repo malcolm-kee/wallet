@@ -1,5 +1,9 @@
-import { auth, googleAuthProvider } from "./../config/firebase";
-import { listenForExpenses, stoplistenForExpenses } from "./expense";
+import {
+  auth,
+  googleAuthProvider,
+  facebookAuthProvider
+} from "./../config/firebase";
+import { listenForExpenses } from "./expense";
 
 import {
   ATTEMPTING_LOGIN,
@@ -11,25 +15,6 @@ import {
   SET_REDIRECT_URL,
   CLEAR_REDIRECT_URL
 } from "../constants";
-
-export const signIn = () => dispatch => {
-  dispatch({
-    type: ATTEMPTING_LOGIN
-  });
-  auth.signInWithPopup(googleAuthProvider).catch(() => {
-    dispatch(signInFail());
-  });
-};
-
-export const signOut = () => dispatch => {
-  dispatch({
-    type: ATTEMPTING_LOGOUT
-  });
-
-  auth.signOut().catch(() => {
-    dispatch(signOutFail());
-  });
-};
 
 const signedIn = user => {
   const { email, displayName, photoURL, uid } = user;
@@ -45,8 +30,9 @@ const signedIn = user => {
   };
 };
 
-const signInFail = () => ({
-  type: SIGN_IN_FAILED
+const signInFail = error_code => ({
+  type: SIGN_IN_FAILED,
+  payload: error_code
 });
 
 const signedOut = () => ({
@@ -57,16 +43,56 @@ const signOutFail = () => ({
   type: SIGN_OUT_FAILED
 });
 
-export const listenToAuthChanges = () => dispatch => {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      dispatch(signedIn(user));
-      dispatch(listenForExpenses(user.uid));
-    } else {
-      dispatch(signedOut());
-      dispatch(stoplistenForExpenses());
-    }
+export const signIn = () => dispatch => {
+  dispatch({
+    type: ATTEMPTING_LOGIN
   });
+  auth.signInWithRedirect(googleAuthProvider);
+};
+
+export const signInWithFacebook = () => dispatch => {
+  dispatch({
+    type: ATTEMPTING_LOGIN
+  });
+  auth.signInWithRedirect(facebookAuthProvider);
+};
+
+export const signOut = () => dispatch => {
+  dispatch({
+    type: ATTEMPTING_LOGOUT
+  });
+
+  auth
+    .signOut()
+    .then(() => {
+      dispatch(signedOut());
+    })
+    .catch(() => {
+      dispatch(signOutFail());
+    });
+};
+
+export const getAuthInitialState = () => dispatch => {
+  const currentUser = auth.currentUser;
+
+  if (currentUser) {
+    dispatch(signedIn());
+  } else {
+    dispatch(signedOut());
+  }
+
+  auth
+    .getRedirectResult()
+    .then(result => {
+      const user = result.user;
+      if (user) {
+        dispatch(signedIn(user));
+        dispatch(listenForExpenses(user.uid));
+      }
+    })
+    .catch(err => {
+      dispatch(signInFail(err.code));
+    });
 };
 
 export const setRedirectUrl = url => ({

@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./config/store";
-import { listenToAuthChanges } from "./actions/auth";
+import { getAuthInitialState } from "./actions/auth";
 
 import HeaderContainer from "./components/HeaderContainer";
 import Home from "./components/Home";
@@ -12,7 +12,7 @@ import Landing from "./components/Landing";
 import EnsureLoggedInContainer from "./components/EnsureLoggedInContainer";
 import LoginContainer from "./scenes/Auth/components/LoginContainer";
 
-store.dispatch(listenToAuthChanges());
+store.dispatch(getAuthInitialState());
 
 class App extends Component {
   render() {

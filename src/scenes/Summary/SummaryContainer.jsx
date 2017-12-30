@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addAll } from "./../../services/calculation/summary";
 import { signIn, signOut } from "./../../actions/auth";
+import { stoplistenForExpenses } from "./../../actions/expense";
 
 import Summary from "./Summary";
 
@@ -34,6 +35,7 @@ const mapDispatchToProps = dispatch => ({
   },
   dispatchSignOut() {
     dispatch(signOut());
+    dispatch(stoplistenForExpenses());
   }
 });
 

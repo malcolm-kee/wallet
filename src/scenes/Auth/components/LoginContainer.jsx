@@ -7,7 +7,11 @@ import {
   SIGNED_IN
 } from "../../../constants";
 
-import { signIn, clearRedirectUrl } from "./../../../actions/auth";
+import {
+  signIn,
+  signInWithFacebook,
+  clearRedirectUrl
+} from "./../../../actions/auth";
 
 import Login from "./Login";
 import Loading from "../../../components/Loading";
@@ -50,9 +54,20 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const { authStatus, dispatchSignIn } = this.props;
+    const {
+      authStatus,
+      errorMsg,
+      dispatchSignIn,
+      dispatchFacebookSignIn
+    } = this.props;
     if (authStatus === ANONYMOUS) {
-      return <Login handleClick={dispatchSignIn} />;
+      return (
+        <Login
+          errorMsg={errorMsg}
+          handleClick={dispatchSignIn}
+          handleClickFacebook={dispatchFacebookSignIn}
+        />
+      );
     } else if (authStatus === AWAITING_AUTH_RESPONSE) {
       return <Loading />;
     } else {
@@ -66,13 +81,17 @@ const mapStateToProps = state => {
 
   return {
     authStatus: auth.status,
-    redirectUrl: auth.redirectUrl
+    redirectUrl: auth.redirectUrl,
+    errorMsg: auth.errorMsg
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   dispatchSignIn() {
     dispatch(signIn());
+  },
+  dispatchFacebookSignIn() {
+    dispatch(signInWithFacebook());
   },
   dispatchClearRedirectUrl() {
     dispatch(clearRedirectUrl());

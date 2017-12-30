@@ -17,12 +17,14 @@ const DEFAULT_STATE = {
   displayName: "",
   photoURL: "",
   email: "",
-  redirectUrl: ""
+  redirectUrl: "",
+  errorMsg: ""
 };
 
 const attemptAuth = state => ({
   ...state,
-  status: AWAITING_AUTH_RESPONSE
+  status: AWAITING_AUTH_RESPONSE,
+  errorMsg: ""
 });
 
 const signedIn = (state, action) => {
@@ -34,23 +36,38 @@ const signedIn = (state, action) => {
     uid,
     displayName,
     photoURL,
-    email
+    email,
+    errorMsg: ""
   };
 };
 
-const signInFail = state => ({
-  ...state,
-  status: ANONYMOUS
-});
+const signInFail = (state, action) => {
+  const error_code = action.payload;
+  if (error_code === "auth/account-exists-with-different-credential") {
+    return {
+      ...state,
+      status: ANONYMOUS,
+      errorMsg: "You have signed up wallet with different login."
+    };
+  }
+
+  return {
+    ...state,
+    status: ANONYMOUS,
+    errorMsg: ""
+  };
+};
 
 const signedOut = () => ({
   ...DEFAULT_STATE,
-  status: ANONYMOUS
+  status: ANONYMOUS,
+  errorMsg: ""
 });
 
 const signOutFail = state => ({
   ...state,
-  status: SIGNED_IN
+  status: SIGNED_IN,
+  errorMsg: ""
 });
 
 const setRedirectUrl = (state, action) => ({
@@ -72,7 +89,7 @@ const authReducer = (state = DEFAULT_STATE, action) => {
       return attemptAuth(state);
 
     case SIGN_IN_FAILED:
-      return signInFail(state);
+      return signInFail(state, action);
 
     case SIGN_OUT_FAILED:
       return signOutFail(state);
