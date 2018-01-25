@@ -8,6 +8,7 @@ import { storage } from "./../../../config/firebase";
 import { createExpense } from "./../../../actions/expense";
 
 import AddExpenseForm from "./AddExpenseForm";
+import { reduceFileSize } from "../../../services/compression";
 
 class AddExpenseFormContainer extends Component {
   state = {
@@ -30,23 +31,27 @@ class AddExpenseFormContainer extends Component {
     const { auth } = this.props;
 
     const file = event.target.files[0];
+
     const storageRef = storage.ref("user-images").child(auth.uid);
-    const uploadTask = storageRef
-      .child(file.name)
-      .put(file, { contentType: file.type });
 
-    uploadTask.on("state_changed", snapshot => {
-      const uploadProgress =
-        snapshot.bytesTransferred / snapshot.totalBytes * 100;
-      this.setState({ uploadProgress });
-    });
+    let uploadTask;
 
-    uploadTask.then(snapshot => {
-      this.setState({
-        imageUrl: snapshot.downloadURL,
-        imageName: file.name
+    reduceFileSize(file, 500 * 1024, 1000, Infinity, 0.9, blob => {
+      uploadTask = storageRef.child(file.name).put(blob);
+
+      uploadTask.on("state_changed", snapshot => {
+        const uploadProgress =
+          snapshot.bytesTransferred / snapshot.totalBytes * 100;
+        this.setState({ uploadProgress });
       });
-      this.setState({ uploadProgress: null });
+
+      uploadTask.then(snapshot => {
+        this.setState({
+          imageUrl: snapshot.downloadURL,
+          imageName: file.name
+        });
+        this.setState({ uploadProgress: null });
+      });
     });
   };
 
