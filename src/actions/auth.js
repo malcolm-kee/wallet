@@ -73,14 +73,6 @@ export const signOut = () => dispatch => {
 };
 
 export const getAuthInitialState = () => dispatch => {
-  const currentUser = auth.currentUser;
-
-  if (currentUser) {
-    dispatch(signedIn());
-  } else {
-    dispatch(signedOut());
-  }
-
   auth
     .getRedirectResult()
     .then(result => {
@@ -88,6 +80,14 @@ export const getAuthInitialState = () => dispatch => {
       if (user) {
         dispatch(signedIn(user));
         dispatch(listenForExpenses(user.uid));
+      } else {
+        const currentUser = auth.currentUser;
+
+        if (currentUser) {
+          dispatch(signedIn());
+        } else {
+          dispatch(signedOut());
+        }
       }
     })
     .catch(err => {
